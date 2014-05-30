@@ -22,10 +22,7 @@ module LearnLtiEngine
           expect(response.body).to include('<lticm:property name="text">Learn Lti Engine</lticm:property>')
           expect(response.body).to include('<lticm:property name="tool_id">learn_lti_engine</lticm:property>')
           expect(response.body).to include('<lticm:property name="icon_url">http://test.host/assets/learn_lti_engine/icon.png</lticm:property>')
-
-
           expect(response.body).to include('<lticm:options name="resource_selection">')
-
         end
       end
     end

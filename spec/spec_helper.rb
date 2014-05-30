@@ -6,6 +6,7 @@ require 'rspec/autorun'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara/poltergeist'
+require 'shoulda/matchers'
 
 Capybara.javascript_driver = :poltergeist
 

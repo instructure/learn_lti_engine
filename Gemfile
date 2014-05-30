@@ -14,5 +14,5 @@ gemspec
 # gem 'debugger'
 
 group :development, :test do
-  gem "jazz_hands"
+  gem "pry"
 end

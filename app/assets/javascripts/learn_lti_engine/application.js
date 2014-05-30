@@ -10,4 +10,9 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require_tree .
+//= require ./vendor/jquery-1.11.0
+//= require ./vendor/handlebars-v1.3.0
+//= require ./vendor/ember
+//= require ./vendor/ember-data
+//= require foundation
+//= require ./learn_lti_engine

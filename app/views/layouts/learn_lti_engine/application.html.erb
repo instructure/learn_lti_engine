@@ -2,6 +2,9 @@
 <html>
 <head>
   <title>LearnLtiEngine</title>
+  <script>
+    EmberENV = { LAUNCH_PARAMS: <%=raw @launch_params.to_json %> };
+  </script>
   <%= stylesheet_link_tag    "learn_lti_engine/application", media: "all" %>
   <%= javascript_include_tag "learn_lti_engine/application" %>
   <%= csrf_meta_tags %>
