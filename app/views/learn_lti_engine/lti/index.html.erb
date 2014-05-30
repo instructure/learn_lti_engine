@@ -1,0 +1,28 @@
+<div class="container">
+  <h4 class="page-header">
+    <%= link_to "config.xml", lti_xml_config_path, class: "btn btn-xs btn-primary pull-right" %>
+    <%= image_tag "learn_lti_engine/icon.png" %> My LTI App
+  </h4>
+
+  <p>
+    This is an example of how you can select a resource and have it be embedded via LTI.
+  </p>
+
+  <%= form_tag lti_embed_path do %>
+    <input type="hidden" name="launch_params" value="<%= @launch_params.to_json %>" />
+    <div class="row">
+      <div class="col-xs-4">
+        <input type="submit" name="embed_type" class="btn btn-large btn-info btn-block"
+               value="Embed a Video" />
+      </div>
+      <div class="col-xs-4">
+        <input type="submit" name="embed_type" class="btn btn-large btn-success btn-block"
+               value="Embed a Picture" />
+      </div>
+      <div class="col-xs-4">
+        <input type="submit" name="embed_type" class="btn btn-large btn-warning btn-block"
+               value="Embed a Link" />
+      </div>
+    </div>
+  <% end %>
+</div>
