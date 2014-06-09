@@ -107,6 +107,8 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -177,6 +179,7 @@ DEPENDENCIES
   learn_lti_engine!
   poltergeist
   pry
+  quiet_assets
   rspec-rails
   sass (~> 3.3.7)
   shoulda-matchers (~> 2.6.1)

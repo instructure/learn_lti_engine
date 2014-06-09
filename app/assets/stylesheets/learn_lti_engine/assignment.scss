@@ -1,0 +1,48 @@
+$price-item-padding: rem-calc(13);
+$price-item-align: left;
+
+h1,h2,h3,h4,h5,h6,p {
+  font-weight: 300;
+}
+
+section.header {
+  h2 {
+    font-size: 2.0rem;
+    line-height: 3.6rem;
+    border-bottom: 1px solid #E1E1E1;
+  }
+}
+
+.side-steps {
+  @include pricing-table-container;
+  .step {
+    @include pricing-table-bullet;
+    cursor: $cursor-pointer-value;
+    &.step-completed {
+      color: $success-color;
+    }
+    &.step-incomplete {
+      color: $primary-color;
+    }
+    &.active {
+      border-left: 5px solid green;
+    }
+  }
+}
+
+.step-contents {
+  h4 {
+    font-weight: 400;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #efefef;
+  }
+  p {
+    line-height: 1.4;
+    margin-bottom: 0.9rem;
+  }
+  code {
+    background-color: #f3f3f3;
+    font-weight: 300;
+  }
+}

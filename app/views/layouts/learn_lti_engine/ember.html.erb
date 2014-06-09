@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Learn LTI</title>
+  <script>
+    EmberENV = { 
+      LAUNCH_PARAMS: <%=raw @launch_params.to_json %>,
+      ASSIGNMENTS: <%=raw LearnLtiEngine::Assignment::ASSIGNMENTS.to_json %>
+    };
+  </script>
+  <%= stylesheet_link_tag    "learn_lti_engine/application", media: "all" %>
+  <%= javascript_include_tag "learn_lti_engine/ember-app" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

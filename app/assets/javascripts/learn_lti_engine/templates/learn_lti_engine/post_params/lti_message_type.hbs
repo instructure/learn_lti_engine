@@ -1,0 +1,24 @@
+<h4>lti_message_type</h4>
+
+<p>
+  Every LTI launch should send across the <code>lti_message_type</code> parameter.
+  As of right now the value for this parameter should always be <code>basic-lti-launch-request</code>.
+  In other words, this is a freebie.
+</p>
+
+<p>
+  Let's use this chance to make sure you're set up correctly. Enter the URL of
+  the location where you'd like to receive the POST request for LTI launches
+  (localhost is fine, <i>make sure it can render in an iframe, i.e. check X-Frame-Options</i>)
+  and click "Launch" to test.
+</p>
+<p>
+  P.S. Don't be sad if your interface doesn't fit in the little iframe we've set
+  up for you, it just means you don't have a responsive design. You don't *have*
+  to build a UI that fits in those dimensions since most users will have a larger
+  window on their computer, but you *should* feel a little bad if you don't know
+  how to <a href="http://en.wikipedia.org/wiki/Responsive_web_design">support
+  both sizes with a single interface</a>.
+</p>
+
+{{render "iframe_panel" iframeData}}

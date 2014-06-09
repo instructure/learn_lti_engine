@@ -14,10 +14,12 @@ $(document).foundation();
 
 // for more details see: http://emberjs.com/guides/application/
 LearnLtiEngine = Ember.Application.create({
-//  resolver: Ember.DefaultResolver.extend({
-//    resolveTemplate: function(parsedName) {
-//      parsedName.fullNameWithoutType = "learn_lti_engine/" + parsedName.fullNameWithoutType;
-//      return this._super(parsedName);
-//    }
-//  })
+  lastLaunchUrl: null,
+
+  resolver: Ember.DefaultResolver.extend({
+    resolveTemplate: function(parsedName) {
+      parsedName.fullNameWithoutType = "learn_lti_engine/" + parsedName.fullNameWithoutType;
+      return this._super(parsedName);
+    }
+  })
 });

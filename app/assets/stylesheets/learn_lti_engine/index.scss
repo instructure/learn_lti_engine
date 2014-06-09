@@ -1,0 +1,36 @@
+section.header {
+  h2 {
+    font-size: 1.6rem;
+    line-height: 3.6rem;
+    border-bottom: 1px solid #E1E1E1;
+    .button {
+      margin-top: 10px;
+    }
+  }
+}
+
+.assignments-module-picker {
+  @include pricing-table-container;
+  .bullet-item {
+    &:hover {
+      background-color: #fcffd2;
+    }
+    @include pricing-table-bullet;
+    cursor: $cursor-pointer-value;
+    text-align: left;
+    dl {
+      margin-bottom: 0px;
+    }
+    dt {
+      font-size: 1.3rem;
+      font-weight: 300;
+      line-height: 1.5rem;
+      color: $primary-color;
+    }
+    dd {
+      font-size: 1.0rem;
+      font-weight: 300;
+      line-height: 1.2rem;
+    }
+  }
+}

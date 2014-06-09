@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
 
   s.add_runtime_dependency "jquery-rails", "~> 3.1.0"
+  s.add_runtime_dependency "shoulda-matchers", "~> 2.6.1"
   s.add_dependency "rails", "~> 4.1.0"
   s.add_dependency "ims-lti"
   s.add_dependency "ember-rails"
@@ -28,6 +29,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sass", "~> 3.3.7"
   s.add_development_dependency "foundation-rails"
   s.add_development_dependency "jquery-rails", "~> 3.1.0"
-  s.add_runtime_dependency "shoulda-matchers", "~> 2.6.1"
   s.add_development_dependency "shoulda-matchers", "~> 2.6.1"
+  s.add_development_dependency "quiet_assets"
 end
