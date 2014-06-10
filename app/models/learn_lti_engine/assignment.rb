@@ -49,6 +49,8 @@ module LearnLtiEngine
       {
           id: id,
           name: name,
+          title: ASSIGNMENTS[name]['title'],
+          description: ASSIGNMENTS[name]['description'],
           lti_user_id: user.lti_user_id,
           lti_assignment_id: lti_assignment_id,
           completed_tasks: completed_tasks,

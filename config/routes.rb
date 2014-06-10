@@ -3,6 +3,8 @@ LearnLtiEngine::Engine.routes.draw do
     resources :assignments do
       collection do
         get 'post_params'
+        get 'step_params'
+        post 'step_validation'
       end
     end
   end

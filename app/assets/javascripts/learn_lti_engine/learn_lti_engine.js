@@ -12,8 +12,13 @@
 
 $(document).foundation();
 
+$.ajaxSetup({
+  headers: { 'Authorization': 'Bearer ' + Ember.ENV.LAUNCH_PARAMS['lis_result_sourcedid'] }
+});
+
 // for more details see: http://emberjs.com/guides/application/
 LearnLtiEngine = Ember.Application.create({
+  rootElement: '#ember-app',
   lastLaunchUrl: null,
 
   resolver: Ember.DefaultResolver.extend({

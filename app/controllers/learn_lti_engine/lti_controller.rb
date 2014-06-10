@@ -10,14 +10,16 @@ module LearnLtiEngine
 
     def launch
       @launch_params = params.reject!{ |k,v| ['controller','action'].include? k }
-
       # debugging on localhost
       if params[:mock_post_params].present?
         @launch_params = mock_post_params
       end
-      
-      @launch_params[:assignment_name] = params[:assignment_name]
       @assignment = LearnLtiEngine::Assignment::ASSIGNMENTS[params[:assignment_name]]
+
+      # find or create an assignment for the user
+      user = User.where(lti_user_id: @launch_params[:user_id]).first_or_create
+      user.assignments.where(lti_assignment_id: @launch_params[:lis_result_sourcedid]).first_or_create(name: @assignment['name'])
+
       render layout: 'learn_lti_engine/ember'
     end
 

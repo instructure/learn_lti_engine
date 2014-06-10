@@ -15,40 +15,45 @@
   </div>
   <div class="row">
     <div class="large-12 columns">
-      <iframe name="lti-launch" style="width: 100%; height: 225px; background-color: #fff; border: 0px;"></iframe>
+      <iframe id="lti-launch" name="lti-launch"></iframe>
     </div>
   </div>
   {{#if isSubmitted}}
     {{#if isCompleted}}
-      <a href="#" {{action "goToNextStep"}} class="button success expand" style="margin-top: 15px;">On to the next lesson!</a>
+      <a href="#" {{action "goToNextStep"}} class="button success expand" style="margin-top: 15px;">Correct! On to the next lesson!</a>
     {{else}}
-      <div class="row">
-        <div class="large-12 columns text-center">
-          {{#if isIncorrect}}
-            <div data-alert class="alert-box alert" style="margin-top: 15px; margin-bottom: 0px;">
-              You have not entered the correct values
-            </div>
-          {{/if}}
-
-          <form id="submit-assignment-form" {{action "submitAssignment" on="submit"}} style="padding: 15px;">
-            {{#each fieldName in validateFieldNames}}
-              <div class="row">
-                <div class="small-4 columns">
-                  <label for="right-label" class="right inline">{{fieldName}}</label>
-                </div>
-                <div class="small-8 columns">
-                  <input type="text" id="right-label" {{bind-attr name=fieldName}} />
-                </div>
-              </div>
-            {{/each}}
-            <div class="row">
-              <div class="small-8 small-offset-4 columns">
-                <button type="submit" class="button expand">Submit Assignment</button>
-              </div>
-            </div>
-          </form>
+      {{#if isRepeat}}
+        <div class="row">
+          <div class="small-12 columns" style="padding-top: 15px;">
+            <a href="#" {{action "launch"}} class="button expand">{{message}}</a>
+          </div>
         </div>
-      </div>
+      {{else}}
+        <div class="row">
+          <div class="large-12 columns text-center">
+            {{#if isIncorrect}}
+              <div data-alert class="alert-box alert">{{message}}</div>
+            {{/if}}
+            <form id="submit-assignment-form" {{action "submitAssignment" on="submit"}} style="padding: 15px;">
+              {{#each field in validationFields}}
+                <div class="row">
+                  <div class="small-4 columns">
+                    <label for="right-label" class="right inline">{{field.name}}</label>
+                  </div>
+                  <div class="small-8 columns">
+                    <input type="text" id="right-label" {{bind-attr name=field.name}} />
+                  </div>
+                </div>
+              {{/each}}
+              <div class="row">
+                <div class="small-8 small-offset-4 columns">
+                  <button type="submit" class="button expand">Submit Assignment</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      {{/if}}
     {{/if}}
   {{/if}}
 </div>

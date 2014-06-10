@@ -1,18 +1,25 @@
-{{#if model.isPostParams}}
-  {{render 'post_params'}}
-{{/if}}
-{{#if model.isSignatureVerification}}
-  {{render 'signature_verification'}}
-{{/if}}
-{{#if model.isReturnRedirects}}
-  {{render 'return_redirects'}}
-{{/if}}
-{{#if model.isXmlConfiguration}}
-  {{render 'xml_configuration'}}
-{{/if}}
-{{#if model.isReturningContent}}
-  {{render 'returning_content'}}
-{{/if}}
-{{#if model.isGradePassback}}
-  {{render 'grade_passback'}}
-{{/if}}
+<section class="header">
+  <h2>{{model.title}}</h2>
+  <p>{{model.description}}</p>
+</section>
+
+<div class="row">
+  <div class="large-3 medium-4 columns">
+    <ul class="side-steps">
+      {{#each step in model.steps}}
+        <li {{bind-attr class=":step step.isActive:active step.isCompleted:step-completed"}} {{action 'goToStep' step}}>
+          {{#if step.isCompleted}}
+            <i class="fa fa-check-circle right"></i>
+          {{else}}
+            <i class="fa fa-circle-thin right"></i>
+          {{/if}}
+          {{step.name}}
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+  <div class="large-9 medium-8 columns step-contents">
+    {{render 'step' model.currentStep}}
+  </div>
+</div>
+

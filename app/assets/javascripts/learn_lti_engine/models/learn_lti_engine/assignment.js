@@ -2,8 +2,10 @@ LearnLtiEngine.Assignment = DS.Model.extend({
   name            : DS.attr('string'),
   isCompleted     : DS.attr('boolean'),
   completedTasks  : DS.attr('array'),
-  ltiAssignmentId : DS.attr('number'),
-  ltiUserId       : DS.attr('number'),
+  ltiAssignmentId : DS.attr('string'),
+  ltiUserId       : DS.attr('string'),
+  title           : DS.attr('string'),
+  description     : DS.attr('string'),
   steps           : null,
 
   isPostParams: function() {
@@ -30,11 +32,26 @@ LearnLtiEngine.Assignment = DS.Model.extend({
     return (this.get('name') === 'grade_passback');
   }.property('name'),
 
+  currentStep: function() {
+    var current = this.get('steps').findBy('isActive', true);
+    if (Ember.isEmpty(current)) {
+      current = this.get('steps.firstObject');
+    }
+    return current;
+  }.property('steps.@each.isActive'),
+
+  nextStep: function() {
+    var currentStep = this.get('currentStep');
+    var currentIdx = this.get('steps').indexOf(currentStep);
+    var nextStep = this.get('steps').objectAt(currentIdx + 1);
+    return nextStep;
+  }.property('currentStep'),
+
   addSteps: function(steps, currentStepName) {
     var s = [];
     steps.forEach(function(name) {
       var isCompleted = this.get('completedTasks').contains(name);
-      var step = LearnLtiEngine.Step.create({ name: name, isCompleted: isCompleted });
+      var step = LearnLtiEngine.Step.create({ assignment: this, name: name, isCompleted: isCompleted });
       if (name == currentStepName) {
         step.set('isActive', true);
       }
@@ -51,8 +68,8 @@ LearnLtiEngine.Assignment = DS.Model.extend({
   },
 
   completeStep: function(stepName) {
-    // VERY INSECURE!!!!
     this.get('completedTasks').push(stepName);
     this.save();
+    this.get('steps').findBy('name', stepName).set('isCompleted', true);
   }
 });

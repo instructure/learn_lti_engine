@@ -1,9 +1,9 @@
-LearnLtiEngine.PostParamsLtiMessageTypeController = Ember.ObjectController.extend({
+LearnLtiEngine.PostParamsLtiVersionController = Ember.ObjectController.extend({
 
   iframeData: function() {
     var data = Ember.Object.create(this.getProperties('postParams', 'validateFieldNames'));
     data.set('step', 'lti_message_type');
-    data.set('nextRoute', 'post_params.lti_version');
+    data.set('nextRoute', 'post_params.resource_link_id');
     return data;
   }.property('postParams', 'validateFieldNames'),
 
@@ -13,6 +13,5 @@ LearnLtiEngine.PostParamsLtiMessageTypeController = Ember.ObjectController.exten
     }.bind(this))
   }.on('init'),
 
-  validateFieldNames: ['lti_message_type']
-
+  validateFieldNames: ['lti_version']
 });

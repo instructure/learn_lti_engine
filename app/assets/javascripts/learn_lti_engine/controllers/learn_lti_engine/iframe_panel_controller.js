@@ -1,6 +1,7 @@
 LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
-  needs: 'post_params',
+  needs: 'assignment',
   status: null,
+  launchUrl: null,
 
   isCompleted: function() {
     return this.get('status') == 'completed';
@@ -9,51 +10,75 @@ LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
   isIncorrect: function() {
     return this.get('status') == 'incorrect';
   }.property('status'),
-  
-  setDefaults: function() {
-    this.set('launchUrl', LearnLtiEngine.get('lastLaunchUrl'));
+
+  isRepeat: function() {
+    return this.get('status') == 'repeat';
+  }.property('status'),
+
+  populateLaunchUrl: function() {
+    var url = $.cookie('iframeLaunchUrl');
+    if (Ember.isEmpty(url)) {
+      url = LearnLtiEngine.get('lastLaunchUrl');
+    }
+    this.set('launchUrl', url);
   }.on('didInsertElement'),
+
+  saveDefaults: function(launchUrl) {
+    $.cookie('iframeLaunchUrl', launchUrl);
+    LearnLtiEngine.set('lastLaunchUrl', launchUrl);
+  },
 
   actions: {
     launch: function() {
       if (!Ember.isEmpty(this.get('launchUrl'))) {
         this.set('status', '');
-        LearnLtiEngine.set('lastLaunchUrl', this.get('launchUrl'));
-        var form     = $('#lti-launch-form'),
-            formData = this.get('postParams');
+        this.saveDefaults(this.get('launchUrl'));
+        var form = $('#lti-launch-form');
         form.attr('action', this.get('launchUrl'));
-        for (var key in formData) {
-          if (formData.hasOwnProperty(key)) {
-            form.append('<input type="hidden" name="' + key + '" value="' + formData[key] + '"/>');
+
+        // Get post params from Rails
+        this.get('model').getFormParams().then(function(data) {
+          this.set('validationFields', data.validation_fields);
+          var formData = data.post_params;
+          for (var key in formData) {
+            if (formData.hasOwnProperty(key)) {
+              form.append('<input type="hidden" name="' + key + '" value="' + formData[key] + '"/>');
+            }
           }
-        }
-        form.submit();
-        this.set('isSubmitted', true);
+          form.submit();
+          this.set('isSubmitted', true);
+        }.bind(this));
       }
     },
 
     submitAssignment: function() {
-      var formData = this.get('postParams'),
-          validateFieldNames = this.get('validateFieldNames');
-      var isValid = true;
-      validateFieldNames.forEach(function(name) {
-        var answer = $('form#submit-assignment-form input[name=' + name + ']').val();
-        if (answer != formData[name]) {
-          isValid = false;
-        }
-      }.bind(this));
-      
-      if (isValid) {
-        this.set('status', 'completed');
-        var assignment = this.get('controllers.post_params.model');
-        assignment.completeStep(this.get('step'));
-      } else {
-        this.set('status', 'incorrect');
-      }
+      var formData = jQuery.deparam.querystring($('#submit-assignment-form').serialize());
+      formData['step_name'] = this.get('model.name');
+
+      // Submit to rails
+      $.ajax({
+        type: "POST",
+        url: '/learn_lti_engine/api/assignments/step_validation',
+        data: formData
+      }).then(
+        function(results) {
+          var status = results.status;
+          this.set('status', status);
+          this.set('message', results.message);
+          if (status == 'completed') {
+            var assignment = this.get('controllers.assignment.model');
+            assignment.completeStep(this.get('model.name'));
+          }
+        }.bind(this),
+        function(err) {
+          debugger;
+        }.bind(this)
+      );
     },
 
     goToNextStep: function() {
-      this.transitionToRoute(this.get('nextRoute'));
+      var assignment = this.get('controllers.assignment.model');
+      this.transitionToRoute('assignment.step', assignment.get('nextStep'));
     }
   }
 });

@@ -1,9 +1,12 @@
 <h4>lti_version</h4>
-    <p>This is another freebie. <code>lti_version</code> should
-    be sent on all LTI launches. Right now this value will
-    always be <code>LTI-1p0</code>, but this may change in the
-    near future.</p>
-    <p>Launch again and then enter the value sent to you
-    for this parameter.</p>
-    
-{{iframe-panel}}
+
+<p>
+  This indicates which version of the specification is being used for this particular message.  Since launches for
+  version 1.1 are upwards compatible with 1.0 launches, this value is not advanced for LTI 1.1.
+</p>
+
+<p>
+  Launch again and then enter the value sent to you for this parameter.
+</p>
+
+{{render "iframe_panel" model}}

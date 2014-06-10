@@ -3,9 +3,9 @@
 <head>
   <title>Learn LTI</title>
   <script>
-    EmberENV = { 
+    EmberENV = {
       LAUNCH_PARAMS: <%=raw @launch_params.to_json %>,
-      ASSIGNMENTS: <%=raw LearnLtiEngine::Assignment::ASSIGNMENTS.to_json %>
+      ASSIGNMENT: <%=raw @assignment.to_json %>
     };
   </script>
   <%= stylesheet_link_tag    "learn_lti_engine/application", media: "all" %>
@@ -15,6 +15,14 @@
 <body>
 
 <%= yield %>
+
+<div class="row">
+  <div class="small-12 columns">
+    <footer id="footer">
+      This course is <a href="https://github.com/instructure/learn_lti_engine">open source</a> and serves as an example LTI application.
+    </footer>
+  </div>
+</div>
 
 </body>
 </html>

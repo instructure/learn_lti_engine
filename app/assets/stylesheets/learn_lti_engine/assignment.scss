@@ -45,4 +45,15 @@ section.header {
     background-color: #f3f3f3;
     font-weight: 300;
   }
+  .alert-box {
+    margin-top: 15px;
+    margin-bottom: 0px;
+  }
+  iframe#lti-launch {
+    width: 100%;
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #D8D8D8;
+  }
 }
+
