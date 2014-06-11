@@ -12,15 +12,17 @@ module LearnLtiEngine
       @launch_params = params.reject!{ |k,v| ['controller','action'].include? k }
       # debugging on localhost
       if params[:mock_post_params].present?
-        @launch_params = mock_post_params
+        @launch_params = mock_post_params(params[:mock_post_params])
       end
-      @assignment = LearnLtiEngine::Assignment::ASSIGNMENTS[params[:assignment_name]]
 
-      # find or create an assignment for the user
-      user = User.where(lti_user_id: @launch_params[:user_id]).first_or_create
-      user.assignments.where(lti_assignment_id: @launch_params[:lis_result_sourcedid]).first_or_create(name: @assignment['name'])
-
-      render layout: 'learn_lti_engine/ember'
+      if @launch_params[:lis_result_sourcedid].present?
+        @assignment = LearnLtiEngine::Assignment::ASSIGNMENTS[params[:assignment_name]]
+        user = User.where(lti_user_id: @launch_params[:user_id]).first_or_create
+        user.assignments.where(lti_assignment_id: @launch_params[:lis_result_sourcedid]).first_or_create!(name: params[:assignment_name])
+        render layout: 'learn_lti_engine/ember'
+      else
+        render 'not_student'        
+      end
     end
 
     def embed
@@ -65,7 +67,7 @@ module LearnLtiEngine
 
     private
 
-    def mock_post_params
+    def mock_post_params(assignment_id)
       {
         oauth_consumer_key: "asdf",
         oauth_signature_method: "HMAC-SHA1",
@@ -84,7 +86,7 @@ module LearnLtiEngine
         launch_presentation_locale: "en",
         launch_presentation_return_url: "https://karl.instructure.com/courses/1/external_tools/307/finished",
         lis_outcome_service_url: "https://karl.instructure.com/api/lti/v1/tools/307/grade_passback",
-        lis_result_sourcedid: "307-1-96-1-012db6ed32f43301cf43611a919cd0b39957ce7d",
+        lis_result_sourcedid: "307-1-96-1-012db6ed32f43301cf43611a919cd0b39957ce7d#{assignment_id}",
         lti_message_type: "basic-lti-launch-request",
         lti_version: "LTI-1p0",
         oauth_callback: "about:blank",

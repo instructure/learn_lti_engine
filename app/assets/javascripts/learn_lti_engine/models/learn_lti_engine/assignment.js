@@ -35,7 +35,8 @@ LearnLtiEngine.Assignment = DS.Model.extend({
   currentStep: function() {
     var current = this.get('steps').findBy('isActive', true);
     if (Ember.isEmpty(current)) {
-      current = this.get('steps.firstObject');
+      current = this.get('steps').findBy('isCompleted', false);
+      current.set('isActive', true);
     }
     return current;
   }.property('steps.@each.isActive'),

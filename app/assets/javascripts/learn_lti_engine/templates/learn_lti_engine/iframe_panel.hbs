@@ -35,13 +35,20 @@
               <div data-alert class="alert-box alert">{{message}}</div>
             {{/if}}
             <form id="submit-assignment-form" {{action "submitAssignment" on="submit"}} style="padding: 15px;">
+              {{log validationFields}}
               {{#each field in validationFields}}
                 <div class="row">
                   <div class="small-4 columns">
-                    <label for="right-label" class="right inline">{{field.name}}</label>
+                    <label for="right-label" class="right inline">{{field.label}}</label>
                   </div>
                   <div class="small-8 columns">
-                    <input type="text" id="right-label" {{bind-attr name=field.name}} />
+                    {{#if field.multiple}}
+                      {{#each opt in field.values}}
+                        <label><input type="radio" {{bind-attr name=field.name value=opt}} /> {{opt}}</label>
+                      {{/each}}
+                    {{else}}
+                      <input type="text" id="right-label" {{bind-attr name=field.name}} />
+                    {{/if}}
                   </div>
                 </div>
               {{/each}}

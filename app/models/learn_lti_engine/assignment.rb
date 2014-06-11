@@ -13,7 +13,7 @@ module LearnLtiEngine
       "signature_verification" => {
         "title" => "LTI Activity 2. Signature Verification",
         "description" => "Make sure you know how to verify signatures and other security parameters.",
-        "tasks" => %w( lti_message_type lti_version resource_link_id context_id user_id roles oauth_consumer_key oauth_nonce oauth_timestamp oauth_signature lis_person_full_name custom_params lis_outcome_service_url )
+        "tasks" => %w( signature_check signature_check2 timestamp_check nonce_check )
       },
       "return_redirects" => {
         "title" => "LTI Activity 3. Return Redirects",
@@ -43,6 +43,10 @@ module LearnLtiEngine
 
     def is_completed?
       (completed_tasks & ASSIGNMENTS[name]["tasks"]).length == ASSIGNMENTS[name]["tasks"].length
+    end
+
+    def validator
+      @validator ||= "LearnLtiEngine::Assignments::#{name.classify}".constantize.new
     end
 
     def as_json
