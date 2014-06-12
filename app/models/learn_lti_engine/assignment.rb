@@ -1,5 +1,6 @@
 module LearnLtiEngine
   class Assignment < ActiveRecord::Base
+    has_many :data, class: AssignmentData
     belongs_to :user
     serialize :lti_launch_params, Hash
     serialize :completed_tasks, Array
@@ -13,7 +14,8 @@ module LearnLtiEngine
       "signature_verification" => {
         "title" => "LTI Activity 2. Signature Verification",
         "description" => "Make sure you know how to verify signatures and other security parameters.",
-        "tasks" => %w( signature_check signature_check2 timestamp_check nonce_check )
+        "tasks" => %w( nonce_check timestamp_check signature_check signature_check2 ),
+        "uses_oauth" => true
       },
       "return_redirects" => {
         "title" => "LTI Activity 3. Return Redirects",
@@ -39,14 +41,18 @@ module LearnLtiEngine
 
     validates :user_id, presence: true
     validates :lti_assignment_id, presence: true, uniqueness: true
-    validates :name, presence: true, inclusion: { in: ASSIGNMENTS.keys }
+
+    def name
+      type.split('::').last.underscore
+    end
 
     def is_completed?
       (completed_tasks & ASSIGNMENTS[name]["tasks"]).length == ASSIGNMENTS[name]["tasks"].length
     end
 
-    def validator
-      @validator ||= "LearnLtiEngine::Assignments::#{name.classify}".constantize.new
+    def step_data(step_name)
+      data = self.data.where(step: options[:step_name]).first_or_create()
+      data.data
     end
 
     def as_json
@@ -55,10 +61,12 @@ module LearnLtiEngine
           name: name,
           title: ASSIGNMENTS[name]['title'],
           description: ASSIGNMENTS[name]['description'],
+          tasks: ASSIGNMENTS[name]['tasks'],
+          uses_oauth: ASSIGNMENTS[name]['uses_oauth'] || false,
           lti_user_id: user.lti_user_id,
           lti_assignment_id: lti_assignment_id,
           completed_tasks: completed_tasks,
-          is_completed: self.is_completed?
+          is_completed: self.is_completed?,
       }
     end
   end

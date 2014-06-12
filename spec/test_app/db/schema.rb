@@ -11,11 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140530192944) do
+ActiveRecord::Schema.define(version: 20140612153820) do
+
+  create_table "learn_lti_engine_assignment_data", force: true do |t|
+    t.integer  "assignment_id"
+    t.string   "step"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "learn_lti_engine_assignment_data", ["assignment_id"], name: "index_learn_lti_engine_assignment_data_on_assignment_id"
 
   create_table "learn_lti_engine_assignments", force: true do |t|
     t.integer  "user_id"
-    t.string   "name"
+    t.string   "type"
     t.text     "lti_launch_params"
     t.text     "completed_tasks"
     t.string   "lti_assignment_id"

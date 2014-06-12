@@ -1,6 +1,16 @@
 <form id="lti-launch-form" method="POST" target="lti-launch"></form>
 
 <div class="panel">
+  {{#if model.assignment.usesOauth}}
+    <div class="row">
+      <div class="large-6 columns">
+        {{input type="text" placeholder="Oauth Key" value=oauthKey}}
+      </div>
+      <div class="large-6 columns">
+        {{input type="text" placeholder="Oauth Secret" value=oauthSecret}}
+      </div>
+    </div>
+  {{/if}}
   <div class="row">
     <div class="large-12 columns">
       <div class="row collapse">
@@ -8,7 +18,7 @@
           {{input type="text" placeholder="Launch URL(e.g. http://localhost:3000/my_app)" value=launchUrl}}
         </div>
         <div class="small-2 columns">
-          <a href="#" {{action "launch"}} class="button secondary postfix">Launch</a>
+          <a href="#" {{action "launch"}} class="button postfix">Launch</a>
         </div>
       </div>
     </div>

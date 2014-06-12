@@ -1,1 +1,12 @@
-HI
+<h4>timestamp_check</h4>
+
+<p>Nice. Now let's check validity of the <code>oauth_timestamp</code>
+  parameter. This should be a Unix timestamp (seconds since Jan 1, 1970 GMT),
+  and should have happened in a reasonable time window before the
+  current time.</p>
+<p>Found a library yet? You probably should.</p>
+<p>For this test you'll need to launch 5 times. Sometimes we'll
+  send a valid timestamp, other times an old or blank timestamp.
+  You should fail gracefully for the end-user.</p>
+
+{{render "iframe_panel" model}}

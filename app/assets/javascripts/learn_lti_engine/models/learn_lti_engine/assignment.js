@@ -6,6 +6,7 @@ LearnLtiEngine.Assignment = DS.Model.extend({
   ltiUserId       : DS.attr('string'),
   title           : DS.attr('string'),
   description     : DS.attr('string'),
+  usesOauth       : DS.attr('boolean'),
   steps           : null,
 
   isPostParams: function() {

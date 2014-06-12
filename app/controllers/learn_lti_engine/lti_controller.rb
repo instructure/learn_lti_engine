@@ -18,10 +18,10 @@ module LearnLtiEngine
       if @launch_params[:lis_result_sourcedid].present?
         @assignment = LearnLtiEngine::Assignment::ASSIGNMENTS[params[:assignment_name]]
         user = User.where(lti_user_id: @launch_params[:user_id]).first_or_create
-        user.assignments.where(lti_assignment_id: @launch_params[:lis_result_sourcedid]).first_or_create!(name: params[:assignment_name])
+        user.assignments.where(lti_assignment_id: @launch_params[:lis_result_sourcedid]).first_or_create!(type: "LearnLtiEngine::Assignments::#{params[:assignment_name].classify}")
         render layout: 'learn_lti_engine/ember'
       else
-        render 'not_student'        
+        render 'not_student'
       end
     end
 

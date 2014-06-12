@@ -20,6 +20,8 @@ $.ajaxSetup({
 LearnLtiEngine = Ember.Application.create({
   rootElement: '#ember-app',
   lastLaunchUrl: null,
+  lastOauthKey: null,
+  lastOauthSecret: null,
 
   resolver: Ember.DefaultResolver.extend({
     resolveTemplate: function(parsedName) {

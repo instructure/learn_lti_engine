@@ -50,15 +50,16 @@ module LearnLtiEngine
     end
 
     def step_params
+      # params[:key], params[:secret]
       render json: {
-          post_params: @assignment.validator.post_params(params[:step_name]),
-          validation_fields: @assignment.validator.validation_fields(params[:step_name])
+          post_params: @assignment.post_params(params),
+          validation_fields: @assignment.validation_fields(params[:step_name])
       }
     end
 
     def step_validation
       step = params[:step_name]
-      render json: @assignment.validator.validation(step, params)
+      render json: @assignment.validation(step, params)
     end
 
     private

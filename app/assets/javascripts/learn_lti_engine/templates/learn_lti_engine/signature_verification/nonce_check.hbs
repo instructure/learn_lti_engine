@@ -1,1 +1,23 @@
-HI
+<h4>nonce_check</h4>
+
+<p>Before we get to verifying signatures, let's make sure you're checking
+  the other parameters related to good security. First, every LTI launch
+  should come across with the <code>oauth_nonce</code> parameter (
+  <a href='http://en.wikipedia.org/wiki/Cryptographic_nonce'>what is a nonce?</a>).
+  If it's not
+  set then your site should return a friendly error message to the user
+  (remember, it's not the user's fault, it's the learning platform's fault,
+  so don't get mad at the user, tell them something nice like that they
+  should contact their sysadmin).</p>
+<p>If it *is* there then you should check to make sure it's a fresh
+  nonce. There's no official guideline on this, but the idea is to
+  make sure you're not getting the same nonce repeatedly from a
+  specific learning platform, since that would weaken the security of the
+  launch. Honestly you should be finding a library to do this work for you.
+  If you're coding up OAuth signature verification from scratch then you're
+  probably doing it wrong.</p>
+<p>For this test you'll need to launch 5 times. If you get no nonce
+  or a bad nonce you should fail friendlily, otherwise you should
+  succeed. Tell us which you're doing each time.</p>
+
+{{render "iframe_panel" model}}

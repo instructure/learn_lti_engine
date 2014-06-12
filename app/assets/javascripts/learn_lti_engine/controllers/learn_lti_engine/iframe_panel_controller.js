@@ -2,6 +2,8 @@ LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
   needs: 'assignment',
   status: null,
   launchUrl: null,
+  oauthKey: null,
+  oauthSecret: null,
 
   isCompleted: function() {
     return this.get('status') == 'completed';
@@ -15,29 +17,27 @@ LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
     return this.get('status') == 'repeat';
   }.property('status'),
 
-  populateLaunchUrl: function() {
-    var url = $.cookie('iframeLaunchUrl');
-    if (Ember.isEmpty(url)) {
-      url = LearnLtiEngine.get('lastLaunchUrl');
+  saveDefaults: function() {
+    $.cookie('iframeLaunchUrl', this.get('launchUrl'));
+    LearnLtiEngine.set('lastLaunchUrl', this.get('launchUrl'));
+    if (this.get('model.assignment.usesOauth')) {
+      $.cookie('iframeOauthKey', this.get('oauthKey'));
+      $.cookie('iframeOauthSecret', this.get('oauthSecret'));
+      LearnLtiEngine.set('lastOauthKey', this.get('oauthKey'));
+      LearnLtiEngine.set('lastOauthKey', this.get('oauthSecret'));
     }
-    this.set('launchUrl', url);
-  }.on('didInsertElement'),
-
-  saveDefaults: function(launchUrl) {
-    $.cookie('iframeLaunchUrl', launchUrl);
-    LearnLtiEngine.set('lastLaunchUrl', launchUrl);
   },
 
   actions: {
     launch: function() {
       if (!Ember.isEmpty(this.get('launchUrl'))) {
         this.set('status', '');
-        this.saveDefaults(this.get('launchUrl'));
+        this.saveDefaults();
         var form = $('#lti-launch-form');
         form.attr('action', this.get('launchUrl'));
 
         // Get post params from Rails
-        this.get('model').getFormParams().then(function(data) {
+        this.get('model').getFormParams(this.get('launchUrl'), this.get('oauthKey'), this.get('oauthSecret')).then(function(data) {
           this.set('validationFields', data.validation_fields);
           var formData = data.post_params;
           for (var key in formData) {

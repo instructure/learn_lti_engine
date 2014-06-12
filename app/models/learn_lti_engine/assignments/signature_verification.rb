@@ -1,34 +1,29 @@
 module LearnLtiEngine
   module Assignments
-    class SignatureVerification
+    class SignatureVerification < LearnLtiEngine::Assignment
       VALIDATION_FIELDS = {
-        'signature_check' => [
-          { name: 'signature_check', multiple: true, label: 'Is this a valid signature?', values: ['yes', 'no'] }
-        ]
+          'nonce_check' => [
+              {name: 'nonce_check', multiple: true, label: 'Is this a valid nonce?', values: ['yes', 'no']}
+          ],
+          'signature_check' => [
+              {name: 'signature_check', multiple: true, label: 'Is this a valid signature?', values: ['yes', 'no']}
+          ]
       }
 
-      def post_params(step)
-        # recommended_params = {
-        #   :context_id => '1408bd6ddf',
-        #   :context_title => 'Hippo 478',
-        #   :launch_presentation_return_url => 'https://learn-lti.herokuapp.com/tool_return/post_launch/0/6614',
-        #   :lis_person_name_full => 'YoussefHamza Rands',
-        #   :roles => 'urn:lti:instrole:ims/lis/observer,instructor,urn:lti:instrole:ims/lis/administrator',
-        #   :tool_consumer_instance_name => 'Account 696',
-        #   :user_id => '2d07434d6e'
-        # }
+      def post_params(options)
+        data = self.step_data(options[:step_name])
+        nonce = SecureRandom.uuid
 
-        {
-          :lti_message_type => 'basic-lti-launch-request',
-          :lti_version => 'LTI-1.0',
-          :resource_link_id => '322e0ed3f0',
-          :oauth_consumer_key => '647ea402eca955b8e84767da08bbbe71',
-          :oauth_nonce => 'OBkXoWQNC3OhehHb5psUs9mQZYIvmKUqKFaFExp3Xk',
-          :oauth_signature => 'GH8tkBTJ2vVA6FsDqr77dBfhNXI=',
-          :oauth_signature_method => 'HMAC-SHA1',
-          :oauth_timestamp => '1402349259',
-          :oauth_version => '1.0'
-        }
+        tc = IMS::LTI::ToolConsumer.new(options[:key], options[:secret])
+        tc.launch_url = options[:launch_url]
+        tc.timestamp = Time.now.to_i
+        tc.nonce = nonce
+
+        tc.lti_version = 'LTI-1.0'
+        tc.lti_message_type = 'basic-lti-launch-request'
+        tc.resource_link_id = SecureRandom.hex(32)
+
+        tc.generate_launch_data
       end
 
       def validation_fields(step)
@@ -36,7 +31,8 @@ module LearnLtiEngine
       end
 
       def validation(step, params)
-        render json: { status: 'repeat', message: 'Great job! Click to relaunch (1 of 5)' }
+
+        render json: {status: 'repeat', message: 'Great job! Click to relaunch (1 of 5)'}
 
         # if VALIDATION_FIELDS[step].all? {|f| f[:value] == params[f[:name]] }
         #   { status: 'completed' }
