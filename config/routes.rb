@@ -2,7 +2,7 @@ LearnLtiEngine::Engine.routes.draw do
   namespace :api do
     resources :assignments do
       collection do
-        get 'post_params'
+        get 'post_param'
         get 'step_params'
         post 'step_validation'
       end

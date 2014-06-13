@@ -5,7 +5,7 @@ LearnLtiEngine.Router.map(function() {
     this.route('step', { path: '/:name' });
   });
 //  this.route('step', { path: '/:name' });
-//  this.route('post_params', { path: '/post_params/:step' });
+//  this.route('post_param', { path: '/post_param/:step' });
 //    this.route('lti_message_type');
 //    this.route('lti_version');
 //    this.route('resource_link_id');

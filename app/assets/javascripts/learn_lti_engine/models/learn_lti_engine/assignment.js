@@ -10,11 +10,11 @@ LearnLtiEngine.Assignment = DS.Model.extend({
   steps           : null,
 
   isPostParams: function() {
-    return (this.get('name') === 'post_params');
+    return (this.get('name') === 'post_param');
   }.property('name'),
 
   isSignatureVerification: function() {
-    return (this.get('name') === 'signature_verification');
+    return (this.get('name') === 'signature_verifications');
   }.property('name'),
 
   isReturnRedirects: function() {
@@ -37,6 +37,9 @@ LearnLtiEngine.Assignment = DS.Model.extend({
     var current = this.get('steps').findBy('isActive', true);
     if (Ember.isEmpty(current)) {
       current = this.get('steps').findBy('isCompleted', false);
+      if (Ember.isEmpty(current)) {
+        current = this.get('steps.lastObject');
+      }
       current.set('isActive', true);
     }
     return current;
@@ -71,7 +74,6 @@ LearnLtiEngine.Assignment = DS.Model.extend({
 
   completeStep: function(stepName) {
     this.get('completedTasks').push(stepName);
-    this.save();
     this.get('steps').findBy('name', stepName).set('isCompleted', true);
   }
 });

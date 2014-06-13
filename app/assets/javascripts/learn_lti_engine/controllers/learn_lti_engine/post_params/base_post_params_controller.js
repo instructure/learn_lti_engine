@@ -1,4 +1,4 @@
 LearnLtiEngine.BasePostParamsController = Ember.Controller.extend({
-  needs: ['post_params'],
-  postParams: Ember.computed.alias('controllers.post_params.postParams')
+  needs: ['post_param'],
+  postParams: Ember.computed.alias('controllers.post_param.postParams')
 });

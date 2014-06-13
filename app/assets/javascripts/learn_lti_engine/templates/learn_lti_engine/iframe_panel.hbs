@@ -42,32 +42,42 @@
         <div class="row">
           <div class="large-12 columns text-center">
             {{#if isIncorrect}}
-              <div data-alert class="alert-box alert">{{message}}</div>
-            {{/if}}
-            <form id="submit-assignment-form" {{action "submitAssignment" on="submit"}} style="padding: 15px;">
-              {{log validationFields}}
-              {{#each field in validationFields}}
+              <a href="#" {{action "launch"}} class="button alert expand" style="margin-top: 15px;">{{message}}</a>
+            {{else}}
+              <form id="submit-assignment-form" {{action "submitAssignment" on="submit"}} style="padding: 15px;">
+                {{#each field in validationFields}}
+                  <div class="row">
+                    <div class="small-4 columns">
+                      <label for="right-label" class="right inline">
+                        {{#if field.label}}{{field.label}}{{else}}{{field.name}}{{/if}}
+                      </label>
+                    </div>
+                    <div class="small-8 columns">
+                      {{#if field.multiple}}
+                        {{#each opt in field.values}}
+                          <label><input type="radio" {{bind-attr name=field.name value=opt}} /> {{opt}}</label>
+                        {{/each}}
+                      {{else}}
+                        {{#if field.boolean}}
+                          <select {{bind-attr name=field.name}}>
+                            <option></option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                          </select>
+                        {{else}}
+                          <input type="text" id="right-label" {{bind-attr name=field.name}} />
+                        {{/if}}
+                      {{/if}}
+                    </div>
+                  </div>
+                {{/each}}
                 <div class="row">
-                  <div class="small-4 columns">
-                    <label for="right-label" class="right inline">{{field.label}}</label>
-                  </div>
-                  <div class="small-8 columns">
-                    {{#if field.multiple}}
-                      {{#each opt in field.values}}
-                        <label><input type="radio" {{bind-attr name=field.name value=opt}} /> {{opt}}</label>
-                      {{/each}}
-                    {{else}}
-                      <input type="text" id="right-label" {{bind-attr name=field.name}} />
-                    {{/if}}
+                  <div class="small-8 small-offset-4 columns">
+                    <button type="submit" class="button expand">Submit Assignment</button>
                   </div>
                 </div>
-              {{/each}}
-              <div class="row">
-                <div class="small-8 small-offset-4 columns">
-                  <button type="submit" class="button expand">Submit Assignment</button>
-                </div>
-              </div>
-            </form>
+              </form>
+            {{/if}}
           </div>
         </div>
       {{/if}}

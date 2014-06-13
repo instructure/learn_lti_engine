@@ -8,7 +8,7 @@ module LearnLtiEngine
           user_id: @user.id,
           lti_assignment_id: "307-1-96-1-012db6ed32f43301cf43611a919cd0b39957ce7d",
           lti_launch_params: { foo: "bar" },
-          name: "post_params",
+          name: "post_param",
           completed_tasks: ["lti_message_type", "lti_version"]
       )
     end
@@ -24,7 +24,7 @@ module LearnLtiEngine
       end
 
       it "with completed tasks" do
-        @assignment.completed_tasks = Assignment::ASSIGNMENTS["post_params"]
+        @assignment.completed_tasks = Assignment::ASSIGNMENTS["post_param"]
         @assignment.save!
         get :show, lti_user_id: @user.lti_user_id, lti_assignment_id: @assignment.lti_assignment_id, name: @assignment.name, use_route: :learn_lti_engine
         json = JSON.parse(response.body)

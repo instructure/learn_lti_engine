@@ -1,15 +1,15 @@
 module LearnLtiEngine
   class Assignment < ActiveRecord::Base
-    has_many :data, class: AssignmentData
+    has_many :step_data, class: StepData
     belongs_to :user
     serialize :lti_launch_params, Hash
     serialize :completed_tasks, Array
 
     ASSIGNMENTS = {
-      "post_params" => {
+      "post_param" => {
         "title" => "LTI Activity 1. POST Parameters",
         "description" => "At their simplest level LTI launches are just POST requests. There are some standard parameters that you should expect to come across on all launches, and also some option parameters you'll potentially want to look for. Let's make sure you can retrieve these correctly.",
-        "tasks" => %w( lti_message_type lti_version resource_link_id context_id user_id roles oauth_consumer_key oauth_nonce oauth_timestamp oauth_signature lis_person_full_name custom_params lis_outcome_service_url )
+        "tasks" => %w( lti_message_type lti_version resource_link_id context_id user_id roles oauth_consumer_key oauth_nonce oauth_timestamp oauth_signature lis_person_name_full custom_params lis_outcome_service_url )
       },
       "signature_verification" => {
         "title" => "LTI Activity 2. Signature Verification",
@@ -17,7 +17,7 @@ module LearnLtiEngine
         "tasks" => %w( nonce_check timestamp_check signature_check signature_check2 ),
         "uses_oauth" => true
       },
-      "return_redirects" => {
+      "return_redirect" => {
         "title" => "LTI Activity 3. Return Redirects",
         "description" => "Make sure you know how to redirect back to the LMS, potentially with success or error messages.",
         "tasks" => %w( lti_message_type lti_version resource_link_id context_id user_id roles oauth_consumer_key oauth_nonce oauth_timestamp oauth_signature lis_person_full_name custom_params lis_outcome_service_url )
@@ -50,9 +50,8 @@ module LearnLtiEngine
       (completed_tasks & ASSIGNMENTS[name]["tasks"]).length == ASSIGNMENTS[name]["tasks"].length
     end
 
-    def step_data(step_name)
-      data = self.data.where(step: options[:step_name]).first_or_create()
-      data.data
+    def step_data_for_step(step_name)
+      self.step_data.where(step: step_name).first_or_create(data: {})
     end
 
     def as_json

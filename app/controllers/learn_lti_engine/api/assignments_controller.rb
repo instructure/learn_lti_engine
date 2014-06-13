@@ -13,7 +13,7 @@ module LearnLtiEngine
       render json: { assignment: @assignment.as_json }
     end
 
-    # def post_params
+    # def post_param
     #   required_params = {
     #     :lti_message_type => 'basic-lti-launch-request',
     #     :lti_version => 'LTI-1.0',
@@ -59,7 +59,14 @@ module LearnLtiEngine
 
     def step_validation
       step = params[:step_name]
-      render json: @assignment.validation(step, params)
+      result = @assignment.validation(params)
+      if result[:status] == 'completed' && !@assignment.completed_tasks.include?(step)
+        @assignment.completed_tasks << step
+        @assignment.save!
+
+        send_grade if @assignment.is_completed?
+      end
+      render json: result
     end
 
     private
@@ -80,6 +87,10 @@ module LearnLtiEngine
         puts "Bearer is not present!"
         head 401
       end
+    end
+
+    def send_grade
+
     end
 
   end

@@ -1,6 +1,18 @@
 <section class="header">
+{{#if model.isCompleted}}
+  <div class="row">
+    <div class="small-10 columns">
+      <h2>{{model.title}}</h2>
+      <p>{{model.description}}</p>
+    </div>
+    <div class="small-2 columns">
+      <img src="<%= asset_path("learn_lti_engine/you-are-awesome-1.png") %>" />
+    </div>
+  </div>
+{{else}}
   <h2>{{model.title}}</h2>
   <p>{{model.description}}</p>
+{{/if}}
 </section>
 
 <div class="row">

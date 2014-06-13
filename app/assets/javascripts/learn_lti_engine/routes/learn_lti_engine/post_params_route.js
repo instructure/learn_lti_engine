@@ -1,7 +1,7 @@
 //LearnLtiEngine.PostParamsRoute = Ember.Route.extend({
 //  model: function(params) {
 //    var assignmentParams = {
-//      name              : 'post_params',
+//      name              : 'post_param',
 //      lti_user_id       : Ember.ENV.LAUNCH_PARAMS['user_id'],
 //      lti_assignment_id : Ember.ENV.LAUNCH_PARAMS['lis_result_sourcedid']
 //    };
@@ -22,7 +22,7 @@
 //  actions: {
 //    goToStep: function(step) {
 //      this.get('controller.model').setActiveStep(step.name);
-//      this.transitionTo('post_params.' + step.name);
+//      this.transitionTo('post_param.' + step.name);
 //    }
 //  }
 //});
