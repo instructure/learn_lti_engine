@@ -2,6 +2,7 @@ module LearnLtiEngine
   class Assignment < ActiveRecord::Base
     has_many :step_data, class: StepData
     belongs_to :user
+    belongs_to :account
     serialize :lti_launch_params, Hash
     serialize :completed_tasks, Array
 

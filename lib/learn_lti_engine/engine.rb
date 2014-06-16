@@ -27,5 +27,6 @@ module LearnLtiEngine
     initializer "learn_lti_engine.assets.precompile" do |app|
       app.config.assets.precompile += %w( learn_lti_engine/ember-app.js )
     end
+
   end
 end

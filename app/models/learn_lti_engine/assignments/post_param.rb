@@ -37,12 +37,12 @@ module LearnLtiEngine
           enabled_roles = []
           roles.each do |role|
             if Random.rand  < (1.0/3)
-              step_data.data[:fields] << {name: role[:name], value: 'true'}
+              step_data.data[:fields] << { name: role[:name], value: 1 }
               role_name = role[:name]
               role_name = role_name.split('/').last if Random.rand < 0.5
               enabled_roles << role_name
             else
-              step_data.data[:fields] << {name: role[:name], value: 'false'}
+              step_data.data[:fields] << { name: role[:name], value: 0 }
             end
           end
 
@@ -79,7 +79,7 @@ module LearnLtiEngine
         # render json: { status: 'repeat', message: 'Great job! Click to relaunch (3 of 5)' }
         step_data = step_data_for_step(options['step_name'])
 
-        if step_data.data[:fields].all? { |f| f[:value] == options[f[:name]] }
+        if (step_data.data[:fields] || []).all? { |f| f[:value].to_s == options[f[:name]].to_s }
           result = {status: 'completed'}
         else
           result = {status: 'incorrect', message: 'You did not provide the correct value. Click to relaunch'}

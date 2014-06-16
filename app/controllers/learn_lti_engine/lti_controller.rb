@@ -1,5 +1,6 @@
 require_dependency "learn_lti_engine/application_controller"
 
+require "oauth/request_proxy/rack_request"
 require "ims/lti"
 
 module LearnLtiEngine
@@ -9,16 +10,31 @@ module LearnLtiEngine
     end
 
     def launch
-      @launch_params = params.reject!{ |k,v| ['controller','action'].include? k }
+      account = Account.where(lti_key: params[:oauth_consumer_key]).first
+
       # debugging on localhost
       if params[:mock_post_params].present?
-        @launch_params = mock_post_params(params[:mock_post_params])
+        @launch_params = mock_post_params(params[:mock_post_params]).with_indifferent_access
+      else
+        tp = authenticated_tool_provider(account)
+        if tp.lti_errorlog
+          render text: tp.lti_errorlog and return
+        end
+        @launch_params = tp.to_params.with_indifferent_access
       end
 
       if @launch_params[:lis_result_sourcedid].present?
+
         @assignment = LearnLtiEngine::Assignment::ASSIGNMENTS[params[:assignment_name]]
         user = User.where(lti_user_id: @launch_params[:user_id]).first_or_create
-        user.assignments.where(lti_assignment_id: @launch_params[:lis_result_sourcedid]).first_or_create!(type: "LearnLtiEngine::Assignments::#{params[:assignment_name].classify}")
+        assignment = user.assignments.where(
+            lti_assignment_id: @launch_params[:lis_result_sourcedid]
+        ).first_or_create!(
+            type: "LearnLtiEngine::Assignments::#{params[:assignment_name].classify}",
+            account_id: account.id
+        )
+        assignment.lti_launch_params = @launch_params
+        assignment.save!
         render layout: 'learn_lti_engine/ember'
       else
         render 'not_student'
@@ -66,6 +82,35 @@ module LearnLtiEngine
     end
 
     private
+
+    def authenticated_tool_provider(account)
+      if account
+        tp = IMS::LTI::ToolProvider.new(account.lti_key, account.lti_secret, params)
+      else
+        tp = IMS::LTI::ToolProvider.new(nil, nil, params)
+        tp.lti_errorlog = "Consumer key wasn't recognized"
+        return tp
+      end
+
+      if !tp.valid_request?(request)
+        tp.lti_errorlog = "The OAuth signature was invalid"
+        return tp
+      end
+
+      if Time.now.utc.to_i - tp.request_oauth_timestamp.to_i > 60*60
+        tp.lti_errorlog = "Your request is too old."
+        return tp
+      end
+
+      # this isn't actually checking anything like it should, just want people
+      # implementing real tools to be aware they need to check the nonce
+      # if was_nonce_used_in_last_x_minutes?(@tp.request_oauth_nonce, 60)
+      #   show_error "Why are you reusing the nonce?"
+      #   return false
+      # end
+
+      return tp
+    end
 
     def mock_post_params(assignment_id)
       {

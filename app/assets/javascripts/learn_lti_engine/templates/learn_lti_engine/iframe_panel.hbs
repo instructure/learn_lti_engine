@@ -59,11 +59,7 @@
                         {{/each}}
                       {{else}}
                         {{#if field.boolean}}
-                          <select {{bind-attr name=field.name}}>
-                            <option></option>
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
-                          </select>
+                          {{multi-button-select name=field.name}}
                         {{else}}
                           <input type="text" id="right-label" {{bind-attr name=field.name}} />
                         {{/if}}

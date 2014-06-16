@@ -60,10 +60,12 @@ module LearnLtiEngine
     def step_validation
       step = params[:step_name]
       result = @assignment.validation(params)
-      if result[:status] == 'completed' && !@assignment.completed_tasks.include?(step)
-        @assignment.completed_tasks << step
-        @assignment.save!
 
+      if result[:status] == 'completed'
+        if !@assignment.completed_tasks.include?(step)
+          @assignment.completed_tasks << step
+          @assignment.save!
+        end
         send_grade if @assignment.is_completed?
       end
       render json: result
@@ -90,7 +92,10 @@ module LearnLtiEngine
     end
 
     def send_grade
-
+      account = @assignment.account
+      tp = IMS::LTI::ToolProvider.new(account.lti_key,account.lti_secret,@assignment.lti_launch_params)
+      tp.extend IMS::LTI::Extensions::OutcomeData::ToolProvider
+      tp.post_replace_result!(1.0)
     end
 
   end

@@ -33,16 +33,15 @@ module LearnLtiEngine
         def validation_fields
           [{
                name: 'nonce_check',
-               multiple: true,
                label: 'Is this a valid nonce?',
-               values: ['Yes', 'No']
+               boolean: true
            }]
         end
 
         def validation(options)
           step_data = assignment.step_data_for_step(STEP_NAME)
-          if ((options['nonce_check'] == 'Yes' && step_data.data['valid_nonce']) ||
-              (options['nonce_check'] == 'No' && !step_data.data['valid_nonce']))
+          if ((options['nonce_check'] == '1' && step_data.data['valid_nonce']) ||
+              (options['nonce_check'] == '0' && !step_data.data['valid_nonce']))
             if step_data.data['successes'] == 4
               step_data.destroy!
               {
