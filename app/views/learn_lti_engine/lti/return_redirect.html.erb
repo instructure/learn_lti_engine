@@ -1,0 +1,16 @@
+<div id="chuck-norris" xmlns="http://www.w3.org/1999/html">
+  <div class="row">
+    <div class="small-12 columns">
+      <h4 class="text-center">Redirected!</h4>
+      <% @messages.each do |message| %>
+        <div class="alert-box <%= message[:type] %>"><%= message[:message] %></div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.onload = function() {
+    window.top.iframePanelController.send("submit", <%=raw params.merge(step_name: @step_data.step).to_json %>);
+  };
+</script>

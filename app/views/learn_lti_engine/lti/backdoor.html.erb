@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="large-12 columns">
+    <%= form_tag launch_url(assignment_name: params[:assignment_name]), method: :post do  %>
+      <section class="header">
+        <h2>
+          <input type="submit" class="button right tiny" value="Launch App" />
+          Backdoor
+        </h2>
+      </section>
+
+      <div class="row">
+        <div class="large-12 columns">
+            <table style="width: 100%;">
+              <tr>
+                <td style="width: 10%;" nowrap="nowrap">Session ID</td>
+                <td><input type="text" name="mock_post_params" value="" /></td>
+              </tr>
+            <% @post_params.each do |k, v| %>
+              <tr>
+                <td style="width: 10%;" nowrap="nowrap"><%= k %></td>
+                <td><input type="text" name="<%= k %>" value="<%= v %>" /></td>
+              </tr>
+            <% end %>
+            </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

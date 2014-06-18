@@ -1,32 +1,36 @@
-<section class="header">
-  <h2>
-    <%= link_to "config.xml", lti_xml_config_path, class: "button secondary tiny right" %> Learn LTI Assignments
-  </h2>
-</section>
+<div class="row">
+  <div class="large-12 columns">
+    <section class="header">
+      <h2>
+        <%= link_to "config.xml", lti_xml_config_path, class: "button secondary tiny right" %> Learn LTI Assignments
+      </h2>
+    </section>
 
-<p>Which activity would you like to embed here?</p>
+    <p>Which activity would you like to embed here?</p>
 
-<%= form_tag lti_embed_path, id: "embed-module-form", role: "form" do %>
-  <input type="hidden" name="launch_params" value="<%= @launch_params.to_json %>" />
-  <input type="hidden" id="assignment_name" name="assignment_name" value="" />
-  <ul class="assignments-module-picker">
-  <% LearnLtiEngine::Assignment::ASSIGNMENTS.each do |k, data| %>
-    <li class="bullet-item" data-assignment-name="<%= k %>" data-toggle="embed">
-      <dl>
-        <dt><span class="label success radius right"><%= data["tasks"].length %> Tasks</span> <%= data["title"] %></dt>
-        <dd><%=raw data["description"] %></dd>
-      </dl>
-    </li>
-  <% end %>
-  </ul>
-<% end %>
+    <%= form_tag lti_embed_path, id: "embed-module-form", role: "form" do %>
+      <input type="hidden" name="launch_params" value="<%= @launch_params.to_json %>" />
+      <input type="hidden" id="assignment_name" name="assignment_name" value="" />
+      <ul class="assignments-module-picker">
+      <% LearnLtiEngine::Assignment::ASSIGNMENTS.each do |k, data| %>
+        <li class="bullet-item" data-assignment-name="<%= k %>" data-toggle="embed">
+          <dl>
+            <dt><span class="label success radius right"><%= data["tasks"].length %> Tasks</span> <%= data["title"] %></dt>
+            <dd><%=raw data["description"] %></dd>
+          </dl>
+        </li>
+      <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
 
 <script type="text/javascript">
-$(function() {
-  $('.bullet-item').click(function() {
-    var assignmentName = $(this).data('assignment-name');
-    $('#assignment_name').val(assignmentName);
-    $('#embed-module-form').submit();
+  $(function() {
+    $('.bullet-item').click(function() {
+      var assignmentName = $(this).data('assignment-name');
+      $('#assignment_name').val(assignmentName);
+      $('#embed-module-form').submit();
+    });
   });
-});
 </script>

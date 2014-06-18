@@ -1,4 +1,6 @@
 require 'ember-rails'
+require 'ims/lti'
+require 'oauth/request_proxy/rack_request'
 
 module LearnLtiEngine
   class Engine < ::Rails::Engine

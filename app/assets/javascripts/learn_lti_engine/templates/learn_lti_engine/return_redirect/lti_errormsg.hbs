@@ -1,0 +1,12 @@
+<h4>lti_errormsg</h4>
+
+<p>In addition to regular messages you can also send error messages
+  with return redirects. User-visible error messages should be sent via
+  the <code>lti_errormsg</code> parameter.</p>
+<p>The question of what happens if you sent both <code>lti_msg</code>
+  and <code>lti_errormsg</code> is not defined, but you should probably
+  not send error and standard messages in the same return.</p>
+<p>Send the message, <code>Who's going to save you, Junior?!</code> as
+  a user-visible error message.</p>
+
+{{render "iframe_panel" model}}

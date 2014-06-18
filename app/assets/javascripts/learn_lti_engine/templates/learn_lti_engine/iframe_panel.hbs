@@ -30,53 +30,57 @@
   </div>
   {{#if isSubmitted}}
     {{#if isCompleted}}
-      <a href="#" {{action "goToNextStep"}} class="button success expand" style="margin-top: 15px;">Correct! On to the next lesson!</a>
+      <a href="#" {{action "goToNextStep"}} class="button success expand" style="margin-top: 15px;">Correct! On to the
+        next lesson!</a>
     {{else}}
-      {{#if isRepeat}}
-        <div class="row">
-          <div class="small-12 columns" style="padding-top: 15px;">
-            <a href="#" {{action "launch"}} class="button expand">{{message}}</a>
+        {{#if isRepeat}}
+          <div class="row">
+            <div class="small-12 columns" style="padding-top: 15px;">
+              <a href="#" {{action "launch"}} class="button expand">{{message}}</a>
+            </div>
           </div>
-        </div>
-      {{else}}
-        <div class="row">
-          <div class="large-12 columns text-center">
-            {{#if isIncorrect}}
-              <a href="#" {{action "launch"}} class="button alert expand" style="margin-top: 15px;">{{message}}</a>
-            {{else}}
-              <form id="submit-assignment-form" {{action "submitAssignment" on="submit"}} style="padding: 15px;">
-                {{#each field in validationFields}}
-                  <div class="row">
-                    <div class="small-4 columns">
-                      <label for="right-label" class="right inline">
-                        {{#if field.label}}{{field.label}}{{else}}{{field.name}}{{/if}}
-                      </label>
-                    </div>
-                    <div class="small-8 columns">
-                      {{#if field.multiple}}
-                        {{#each opt in field.values}}
-                          <label><input type="radio" {{bind-attr name=field.name value=opt}} /> {{opt}}</label>
-                        {{/each}}
-                      {{else}}
-                        {{#if field.boolean}}
-                          {{multi-button-select name=field.name}}
+        {{else}}
+          <div class="row">
+            <div class="large-12 columns text-center">
+              {{#if isIncorrect}}
+                <a href="#" {{action "launch"}} class="button alert expand" style="margin-top: 15px;">{{message}}</a>
+              {{else}}
+                {{#unless hideButtons}}
+                <form id="submit-assignment-form" {{action "submitAssignment" on="submit"}} style="padding: 15px;">
+                  {{#each field in validationFields}}
+                    <div class="row">
+                      <div class="small-4 columns">
+                        <label for="right-label" class="right inline">
+                          {{#if field.label}}{{field.label}}{{else}}{{field.name}}{{/if}}
+                        </label>
+                      </div>
+                      <div class="small-8 columns">
+                        {{#if field.multiple}}
+                          {{#each opt in field.values}}
+                            <label><input type="radio" {{bind-attr name=field.name value=opt}} /> {{opt}}</label>
+                          {{/each}}
                         {{else}}
-                          <input type="text" id="right-label" {{bind-attr name=field.name}} />
+                          {{#if field.boolean}}
+                            {{multi-button-select name=field.name}}
+                          {{else}}
+                            <input type="text" id="right-label" {{bind-attr name=field.name}} />
+                          {{/if}}
                         {{/if}}
-                      {{/if}}
+                      </div>
+                    </div>
+                  {{/each}}
+                  <div class="row">
+                    <div class="small-8 small-offset-4 columns">
+                      <button type="submit" class="button expand">Submit Assignment</button>
                     </div>
                   </div>
-                {{/each}}
-                <div class="row">
-                  <div class="small-8 small-offset-4 columns">
-                    <button type="submit" class="button expand">Submit Assignment</button>
-                  </div>
-                </div>
-              </form>
-            {{/if}}
+                </form>
+
+                {{/unless}}
+              {{/if}}
+            </div>
           </div>
-        </div>
-      {{/if}}
+        {{/if}}
     {{/if}}
   {{/if}}
 </div>

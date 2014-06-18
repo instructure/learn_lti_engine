@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616205845) do
+ActiveRecord::Schema.define(version: 20140617194120) do
 
   create_table "learn_lti_engine_accounts", force: true do |t|
     t.string   "lti_key"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20140616205845) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "uuid"
   end
 
   add_index "learn_lti_engine_step_data", ["assignment_id"], name: "index_learn_lti_engine_step_data_on_assignment_id"

@@ -1,8 +1,5 @@
 require_dependency "learn_lti_engine/application_controller"
 
-require "oauth/request_proxy/rack_request"
-require "ims/lti"
-
 module LearnLtiEngine
   class LtiController < ApplicationController
     def index
@@ -33,6 +30,7 @@ module LearnLtiEngine
             type: "LearnLtiEngine::Assignments::#{params[:assignment_name].classify}",
             account_id: account.id
         )
+        @launch_params[:root_url] = root_url
         assignment.lti_launch_params = @launch_params
         assignment.save!
         render layout: 'learn_lti_engine/ember'
@@ -81,6 +79,25 @@ module LearnLtiEngine
       head 200
     end
 
+    def backdoor
+      @post_params = mock_post_params(params[:session_id])
+    end
+
+    def return_redirect
+      @step_data = LearnLtiEngine::StepData.where(uuid: params[:uuid]).first
+      @step_data.data['is_redirected'] = true
+      @step_data.save!
+
+      @messages = []
+      @messages << { message: params[:lti_msg], type: "success" } if params[:lti_msg].present?
+      @messages << { message: params[:lti_log], type: "info" } if params[:lti_log].present?
+      @messages << { message: params[:lti_errormsg], type: "alert rounded" } if params[:lti_errormsg].present?
+      @messages << { message: params[:lti_errorlog], type: "info rounded" } if params[:lti_errorlog].present?
+      @messages << { message: LearnLtiEngine::ChuckNorris.speak, type: "success" } if@messages.empty?
+
+      render layout: false
+    end
+
     private
 
     def authenticated_tool_provider(account)
@@ -114,7 +131,7 @@ module LearnLtiEngine
 
     def mock_post_params(assignment_id)
       {
-        oauth_consumer_key: "asdf",
+        oauth_consumer_key: "a9c13315-ea66-4329-86ef-04ca7ce2e88c",
         oauth_signature_method: "HMAC-SHA1",
         oauth_timestamp: "1401482037",
         oauth_nonce: "uXUn7YnMbH7gxH8DfCmtvmwZDf78gralGVim7gopo",

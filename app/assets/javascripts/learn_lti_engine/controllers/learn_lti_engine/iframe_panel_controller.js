@@ -1,9 +1,20 @@
 LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
   needs: 'assignment',
   status: null,
+  message: null,
   launchUrl: null,
   oauthKey: null,
   oauthSecret: null,
+  validationFields: [],
+
+  setThisOnWindow: function() {
+    window.iframePanelController = this;
+  }.on('init'),
+
+  hideButtons: function() {
+    // this is annoying that I have to do this
+    return Ember.isEmpty(this.get('validationFields'));
+  }.property('validationFields'),
 
   isCompleted: function() {
     return this.get('status') == 'completed';
@@ -38,6 +49,7 @@ LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
 
         // Get post params from Rails
         this.get('model').getFormParams(this.get('launchUrl'), this.get('oauthKey'), this.get('oauthSecret')).then(function(data) {
+
           this.set('validationFields', data.validation_fields);
           var formData = data.post_params;
           for (var key in formData) {
@@ -45,6 +57,7 @@ LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
               form.append('<input type="hidden" name="' + key + '" value="' + formData[key] + '"/>');
             }
           }
+
           form.submit();
           this.set('isSubmitted', true);
         }.bind(this));
@@ -54,7 +67,10 @@ LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
     submitAssignment: function() {
       var formData = jQuery.deparam.querystring($('#submit-assignment-form').serialize());
       formData['step_name'] = this.get('model.name');
+      this.send("submit", this.get('model.name'), formData);
+    },
 
+    submit: function(formData) {
       // Submit to rails
       $.ajax({
         type: "POST",
@@ -67,7 +83,7 @@ LearnLtiEngine.IframePanelController = Ember.ObjectController.extend({
           this.set('message', results.message);
           if (status == 'completed') {
             var assignment = this.get('controllers.assignment.model');
-            assignment.completeStep(this.get('model.name'));
+            assignment.completeStep(formData['step_name']);
           }
         }.bind(this),
         function(err) {

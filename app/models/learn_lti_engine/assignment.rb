@@ -15,13 +15,13 @@ module LearnLtiEngine
       "signature_verification" => {
         "title" => "LTI Activity 2. Signature Verification",
         "description" => "Make sure you know how to verify signatures and other security parameters.",
-        "tasks" => %w( nonce_check timestamp_check signature_check signature_check2 ),
+        "tasks" => %w( nonce_check timestamp_check signature_check ),
         "uses_oauth" => true
       },
       "return_redirect" => {
         "title" => "LTI Activity 3. Return Redirects",
         "description" => "Make sure you know how to redirect back to the LMS, potentially with success or error messages.",
-        "tasks" => %w( lti_message_type lti_version resource_link_id context_id user_id roles oauth_consumer_key oauth_nonce oauth_timestamp oauth_signature lis_person_full_name custom_params lis_outcome_service_url )
+        "tasks" => %w( launch_presentation_return_url lti_msg lti_log lti_errormsg lti_errorlog )
       },
       "xml_configuration" => {
         "title" => "LTI Activity 4. XML Configuration",

@@ -57,3 +57,36 @@ section.header {
   }
 }
 
+#chuck-norris {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  background-image:  image-url("learn_lti_engine/chuck-norris.jpg");
+  background-size:   cover;
+  background-repeat: no-repeat;
+  div.columns {
+    background-color: rgba(0,0,0,0.6);
+    height: 300px;
+    overflow: hidden;
+    h4, div.alert-box {
+      color: #fff;
+    }
+    h4 {
+      margin-top: 25px;
+      font-size: 2.0rem;
+    }
+    div.alert-box {
+      padding: 10px 40px;
+      text-align: center;
+    }
+    .alert-box.info {
+      background-color: rgba(0,0,0,0.7);
+      border: 0px;
+    }
+    .alert-box.success {
+      background-color: rgba(255,255,255,0.5);
+      border: 0px;
+      color: #000;
+    }
+  }
+}

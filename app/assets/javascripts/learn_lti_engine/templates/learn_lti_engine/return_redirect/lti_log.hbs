@@ -1,0 +1,12 @@
+<h4>lti_log</h4>
+
+<p>Great, so you can send a message to the user. If you want to
+  send a message for the learning platform to log without telling
+  the user (say, for logging or I guess secret messages) you append
+  the query parameter <code>lti_log</code>.</p>
+<p>Send the log message, <code>One ping only.</code> as a log return message.</p>
+<p>Side note: this return URL, unlike the last one, already has
+  a query string included. You should be able to append to the URL
+  whether or not it already has a query string.</p>
+
+{{render "iframe_panel" model}}
